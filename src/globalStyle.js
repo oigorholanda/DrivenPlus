@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -18,7 +18,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font-family: 'Lexend Deca', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	vertical-align: baseline;
 }
 
@@ -50,19 +50,26 @@ table {
 }
 input {
     width: 100%;
-    height: 45px;
+    height: 52px;
     background: #ffffff;
-    border: 1px solid #d5d5d5;
-    border-radius: 5px;
+	border: none;
+    border-radius: 8px;
+	padding: 10px;
     &::placeholder {
       font-size: 16px;
-      color: #dbdbdb;
+      color: #7E7E7E;
     }
 }
-a {
-	text-decoration: none;
-	color: inherit;
+button {
+	width: 100%;
+	height: 52px;
+	background: #FF4791;
+	border-radius: 8px;
+	color: white;
+	border: none;
+	font-size: 15px;
+	font-weight: 700;
 }
-`
+`;
 
-export default GlobalStyle
+export default GlobalStyle;
