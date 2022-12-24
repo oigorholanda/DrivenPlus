@@ -9,7 +9,10 @@ export default function Login() {
 
       <input type="email" placeholder="E-mail" required />
       <input type="password" placeholder="Senha" required />
-      <button>ENTRAR</button>
+      <Link to="/subscriptions">
+        <button>ENTRAR</button>
+      </Link>
+      
 
       <Link to="/sign-up">
         <p>Não possuí uma conta? Cadastre-se</p>

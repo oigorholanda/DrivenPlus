@@ -70,6 +70,10 @@ button {
 	font-size: 15px;
 	font-weight: 700;
 }
+a {
+	text-decoration: none;
+	color: inherit;
+}
 `;
 
 export default GlobalStyle;

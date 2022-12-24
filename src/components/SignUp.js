@@ -29,6 +29,7 @@ const ContainerLogin = styled.form`
   gap: 17px;
   h1 {
     color: white;
+    
   }
   p {
     margin-top: 25px;
