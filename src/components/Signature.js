@@ -1,19 +1,26 @@
 import styled from "styled-components";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { FaWindowClose, FaMoneyBillWave } from "react-icons/fa";
+import { FaMoneyBillWave } from "react-icons/fa";
 import { TbClipboardList } from "react-icons/tb";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { base_url } from "../constants/urls";
 import axios from "axios";
 import AuthContext from "../contexts/AuthContext";
+import Modal from "./Modal";
 
 export default function Signature() {
-  const [modal, setModal] = useState("hidden");
+  const [modal, setModal] = useState(false);
   const { idPlano } = useParams();
   const { token } = useContext(AuthContext);
   const [plan, setPlan] = useState([]);
   const navigate = useNavigate();
+  const [form, setForm] = useState({
+    cardName: "",
+    cardNumber: "",
+    securityNumber: "",
+    expirationDate: "",
+  });
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -37,13 +44,16 @@ export default function Signature() {
       });
   }, []);
 
-  function showModal(event) {
-    event.preventDefault();
-    setModal("visible");
+  function handleForm(e) {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   }
 
-  function exitModal() {
-    setModal("hidden");
+  function showModal(event) {
+    event.preventDefault();
+    setModal(true);
   }
 
   return (
@@ -51,7 +61,7 @@ export default function Signature() {
       <Link to="/subscriptions">
         <IoMdArrowRoundBack color={"white"} size={35} />
       </Link>
-      <img src={plan.image} alt="image plan" />
+      <img src={plan.image} alt="plan logo" />
       <h3>{plan.name}</h3>
       <h4>
         <TbClipboardList
@@ -80,29 +90,53 @@ export default function Signature() {
         R$ {plan.price && plan.price.replace(".", ",")} cobrados mensalmente
       </p>
       <SignatureForm onSubmit={showModal}>
-        <input type="text" placeholder="Nome impresso no cartão" />
-        <input type="text" placeholder="Digitos do cartão" />
+        <input
+          name="cardName"
+          onChange={handleForm}
+          type="text"
+          placeholder="Nome impresso no cartão"
+          value={form.cardName}
+          required
+        />
+        <input
+          name="cardNumber"
+          onChange={handleForm}
+          type="text"
+          placeholder="Digitos do cartão"
+          value={form.cardNumber}
+          required
+        />
         <div>
-          <input type="number" placeholder="Código de segurança" />
-          <input type="text" placeholder="Validade" />
+          <input
+            name="securityNumber"
+            onChange={handleForm}
+            type="number"
+            placeholder="Código de segurança"
+            value={form.securityNumber}
+            required
+          />
+          <input
+            name="expirationDate"
+            onChange={handleForm}
+            type="text"
+            placeholder="Validade"
+            value={form.expirationDate}
+            minLength="5"
+            required
+          />
         </div>
-        <button>ASSINAR</button>
+        <button type="submit">ASSINAR</button>
       </SignatureForm>
-      <ConfirmWindow display={modal}>
-        <FaWindowClose color={"white"} size={32} onClick={() => exitModal()} />
-        <div className="modal">
-          <h4>
-            Tem certeza que deseja assinar o plano <br /> {plan.name} por R$
-            {plan.price && plan.price.replace(".", ",")}?
-          </h4>
-          <div>
-            <button className="butao" onClick={() => exitModal()}>
-              Não
-            </button>
-            <button onClick={() => navigate("/home")}>Sim</button>
-          </div>
-        </div>
-      </ConfirmWindow>
+      {modal && (
+        <Modal
+          token={token}
+          membershipId={idPlano}
+          form={form}
+          setModal={setModal}
+          planName={plan.name}
+          planPrice={plan.price && plan.price.replace(".", ",")}
+        />
+      )}
     </ContainerSign>
   );
 }
@@ -142,34 +176,4 @@ const SignatureForm = styled.form`
   flex-direction: column;
   margin-top: 10px;
   gap: 10px;
-`;
-
-const ConfirmWindow = styled.div`
-  visibility: ${(props) => props.display};
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 25px;
-  flex-direction: column;
-  align-items: flex-end;
-  .modal {
-    background-color: white;
-    color: black;
-    width: 248px;
-    margin: 200px auto;
-    flex-direction: column;
-    padding: 20px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 19px;
-    text-align: center;
-    gap: 20px;
-  }
-  .butao {
-    background-color: #cecece;
-  }
 `;
