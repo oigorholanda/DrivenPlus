@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { base_url } from "../constants/urls";
 
 export default function SignUp() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
     name: "",
@@ -13,31 +13,29 @@ export default function SignUp() {
     password: "",
   });
 
-  function handleForm (e) {
+  function handleForm(e) {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
-    }) 
+    });
   }
 
-
-    function cadastrar(event) {
-        event.preventDefault();
-    
-        {axios
-            .post(`${base_url}/auth/sign-up`, form)
-            .then((res) => {
-              console.log(res.data)
-              alert("Cadastro efetuado com sucesso! Realize o Login")
-              navigate("/")
-            })
-            .catch((err) => {
-              alert(err.response.data.message)
-              console.log(err.response)
-            });
-        }
-      }
-
+  function cadastrar(event) {
+    event.preventDefault();
+    {
+      axios
+        .post(`${base_url}/auth/sign-up`, form)
+        .then((res) => {
+          console.log(res.data);
+          alert("Cadastro efetuado com sucesso! Realize o Login");
+          navigate("/");
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+          console.log(err.response);
+        });
+    }
+  }
 
   return (
     <SignUpForm onSubmit={cadastrar}>
@@ -73,7 +71,7 @@ export default function SignUp() {
         value={form.password}
         required
       />
-      <button type='submit'>CADASTRAR</button>
+      <button type="submit">CADASTRAR</button>
 
       <Link to="/">
         <p>Já possuí uma conta? Entre</p>

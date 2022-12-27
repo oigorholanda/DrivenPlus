@@ -59,6 +59,9 @@ input {
       font-size: 16px;
       color: #7E7E7E;
     }
+	:focus {
+        outline: 2px solid #ff47919f;
+      }
 }
 button {
 	width: 100%;

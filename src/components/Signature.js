@@ -2,13 +2,40 @@ import styled from "styled-components";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { FaWindowClose, FaMoneyBillWave } from "react-icons/fa";
 import { TbClipboardList } from "react-icons/tb";
-import Logo from "../assets/Group 1.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { base_url } from "../constants/urls";
+import axios from "axios";
+import AuthContext from "../contexts/AuthContext";
 
 export default function Signature() {
   const [modal, setModal] = useState("hidden");
-  const navigate = useNavigate()
+  const { idPlano } = useParams();
+  const { token } = useContext(AuthContext);
+  const [plan, setPlan] = useState([]);
+  const navigate = useNavigate();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+      console.log("Deslogado");
+    }
+    axios
+      .get(`${base_url}/subscriptions/memberships/${idPlano}`, config)
+      .then((res) => {
+        console.log(res.data);
+        setPlan(res.data);
+      })
+      .catch((err) => {
+        console.log("Algo deu errado");
+        console.log(err.response.data);
+      });
+  }, []);
 
   function showModal(event) {
     event.preventDefault();
@@ -21,34 +48,37 @@ export default function Signature() {
 
   return (
     <ContainerSign>
-      <Link to="/">
-        <IoMdArrowRoundBack
-          color={"white"}
-          size={35}
-          onClick={() => console.log("clicado")}
-        />
+      <Link to="/subscriptions">
+        <IoMdArrowRoundBack color={"white"} size={35} />
       </Link>
-      <img src={Logo} alt="" />
-      <h3>Driven Plus</h3>
+      <img src={plan.image} alt="image plan" />
+      <h3>{plan.name}</h3>
       <h4>
         <TbClipboardList
           color={"#FF4791"}
           size={19}
           style={{ verticalAlign: "bottom" }}
         />
-        Benefícios
+        Benefícios:
       </h4>
-      <p>1. Brindes Exclusivos</p>
-      <p>2. Materiais bônus de web</p>
-      {/* Map para cada um dos beneficios */}
+      {plan.perks &&
+        plan.perks.map((perk, i) => (
+          <p key={perk.id}>
+            {i + 1}. {perk.title}
+          </p>
+        ))}
+
       <h4>
         <FaMoneyBillWave
           color={"#FF4791"}
           size={18}
           style={{ verticalAlign: "text-top" }}
-        /> Preço
+        />{" "}
+        Preço:
       </h4>
-      <p>R$ 39,99 cobrados mensalmente</p>
+      <p>
+        R$ {plan.price && plan.price.replace(".", ",")} cobrados mensalmente
+      </p>
       <SignatureForm onSubmit={showModal}>
         <input type="text" placeholder="Nome impresso no cartão" />
         <input type="text" placeholder="Digitos do cartão" />
@@ -62,8 +92,8 @@ export default function Signature() {
         <FaWindowClose color={"white"} size={32} onClick={() => exitModal()} />
         <div className="modal">
           <h4>
-            Tem certeza que deseja assinar o plano <br /> Driven Plus (R$
-            39,99)?
+            Tem certeza que deseja assinar o plano <br /> {plan.name} por R$
+            {plan.price && plan.price.replace(".", ",")}?
           </h4>
           <div>
             <button className="butao" onClick={() => exitModal()}>
@@ -82,7 +112,7 @@ const ContainerSign = styled.div`
   display: flex;
   flex-direction: column;
   padding: 25px;
-  gap: 10px;
+  gap: 8px;
   font-weight: 400;
   position: relative;
   div {
@@ -91,7 +121,7 @@ const ContainerSign = styled.div`
     gap: 10px;
   }
   img {
-    margin: 15px auto 2px;
+    margin: 0px auto 2px;
   }
   h3 {
     font-size: 32px;
@@ -100,6 +130,7 @@ const ContainerSign = styled.div`
   }
   h4 {
     font-size: 16px;
+    margin-top: 5px;
   }
   p {
     font-size: 14px;

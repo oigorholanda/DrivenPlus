@@ -1,17 +1,59 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/Driven_white 1.png";
+import { base_url } from "../constants/urls";
+import AuthContext from "../contexts/AuthContext";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { setToken } = useContext(AuthContext)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function login(event) {
+    event.preventDefault()
+    {
+      axios
+        .post(`${base_url}/auth/login`, {email, password})
+        .then((res) => {
+          console.log(res.data);
+          setToken(res.data.token)
+          if (res.data.membership !== null) {
+            navigate("/home")
+          } else {
+            navigate("/subscriptions")
+          }
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+          console.log(err.response);
+        });
+    }
+  }
+
   return (
-    <ContainerLogin>
+    <ContainerLogin onSubmit={login}>
       <img src={Logo} alt="Logo Driven" />
 
-      <input type="email" placeholder="E-mail" required />
-      <input type="password" placeholder="Senha" required />
-      <Link to="/subscriptions">
-        <button>ENTRAR</button>
-      </Link>
+      <input
+        type="email"
+        placeholder="E-mail"
+        name="email"
+        onChange={(e) => setEmail(e.target.value)}
+        value={email}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Senha"
+        name="password"
+        onChange={(e) => setPassword(e.target.value)}
+        value={password}
+        required
+      />
+        <button type="submit">ENTRAR</button>
       
 
       <Link to="/sign-up">

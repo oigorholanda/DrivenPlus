@@ -1,14 +1,15 @@
 import styled from "styled-components";
-import logo from "../assets/Group 1.png";
+import logo1 from "../assets/Group 1.png";
+import logo2 from "../assets/Group 2.png";
+import logo3 from "../assets/Group 3.png";
 
-export default function Plan() {
+export default function Plan({ image, price }) {
+
   return (
-    
       <PlanDiv>
-        <img src={logo} alt="Logo plano {ID}" />
-        <p>R$ 39,99</p>
+        <img src={image} alt="Logo plano {ID}" />
+        <p>R$ {price.replace(".", ",")}</p>
       </PlanDiv>
-    
   );
 }
 
