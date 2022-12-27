@@ -31,7 +31,7 @@ export default function Signature() {
   useEffect(() => {
     if (!token) {
       navigate("/");
-      console.log("Deslogado");
+      console.log("Deslogado (signature)");
     }
     axios
       .get(`${base_url}/subscriptions/memberships/${idPlano}`, config)

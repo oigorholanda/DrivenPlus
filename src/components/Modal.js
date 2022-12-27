@@ -21,13 +21,13 @@ export default function Modal({
         axios.post(`${base_url}/subscriptions`, form, config)
         .then((res) => {
             console.log("Assinatura realizada", res.data)
-            setUser(...user, res.data)
+            setUser({ ...user, membership:res.data})
             navigate("/home")
         })
         .catch((err) => {
             alert("Não foi possivel procesar o pedido, verifique seus dados e tente novamente")
             setModal(false)
-            console.log(err.response.data.message);
+            console.log(err.message);
         })
     }
 

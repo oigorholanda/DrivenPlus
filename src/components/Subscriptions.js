@@ -19,7 +19,7 @@ export default function Subscriptions() {
   useEffect(() => {
     if (!token) {
       navigate("/");
-      console.log("Deslogado");
+      console.log("Deslogado (sub)");
     }
     axios
       .get(`${base_url}/subscriptions/memberships`, config)
@@ -28,8 +28,7 @@ export default function Subscriptions() {
         setPlans(res.data);
       })
       .catch((err) => {
-        console.log("Algo deu errado");
-        console.log(err.response.data);
+        console.log("Algo deu errado", err.response.data)
       });
   }, []);
 
