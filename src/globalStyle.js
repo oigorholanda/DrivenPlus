@@ -54,7 +54,7 @@ input {
     background: #ffffff;
 	border: none;
     border-radius: 8px;
-	padding: 10px;
+	padding: 5px;
     &::placeholder {
       font-size: 16px;
       color: #7E7E7E;
