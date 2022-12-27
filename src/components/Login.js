@@ -23,6 +23,7 @@ export default function Login() {
           console.log(res.data);
           setToken(res.data.token)
           setUser(res.data)
+          localStorage.setItem("user", JSON.stringify(res.data));
           if (res.data.membership !== null) {
             navigate("/home")
           } else {

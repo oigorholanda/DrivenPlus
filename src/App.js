@@ -10,8 +10,9 @@ import AuthContext from "./contexts/AuthContext";
 import UserContext from "./contexts/UserContext";
 
 function App() {
-  const [token, setToken] = useState("");
-  const [user, setUser] = useState({});
+  const tokenOnLocalStorage = localStorage.getItem("token");
+  const [token, setToken] = useState(tokenOnLocalStorage);
+  const [user, setUser] = useState([]);
 
   return (
     <AuthContext.Provider value={{ token, setToken }}>

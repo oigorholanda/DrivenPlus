@@ -6,28 +6,28 @@ import styled from "styled-components";
 import { base_url } from "../constants/urls";
 import AuthContext from "../contexts/AuthContext";
 import UserContext from "../contexts/UserContext";
-import logo1 from "../assets/Group 1.png";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { token } = useContext(AuthContext);
   const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   };
-  console.log(user);
 
-  if (user.length === 0) {
-    navigate("/");
-  }
+  const data = localStorage.getItem("user");
+  const renderUser = JSON.parse(data);
 
   function cancelPlan() {
-    if (window.confirm("Quer realmente cancelar seu plano?")) {
+    if (
+      window.confirm(`Quer realmente cancelar seu plano, ${renderUser.name}?`)
+    ) {
       axios
         .delete(`${base_url}/subscriptions`, config)
-        .then(() => alert("Plano cancelado!"))
+        .then(() => {
+          alert("Plano cancelado!");
+          navigate("/subscriptions");
+        })
         .catch(() =>
           alert(
             "Não foi possivel concluir o cancelamento, por favor tente novamente"
@@ -40,30 +40,19 @@ export default function Home() {
     <ContainerHome>
       <div className="header">
         <Link to="/">
-          <img
-            src={user ? user.membership.image : logo1}
-            alt="logo"
-          />
+          <img src={renderUser.membership.image} alt="logo" />
         </Link>
         <FaUserCircle color="white" size={40} />
       </div>
 
-      <h2>Olá, {user.name}</h2>
+      <h2>Olá, {renderUser.name}</h2>
 
       <div className="options">
-        { 
-          user.membership.perks.map((perk) => (
-            <a href={perk.link} key={perk.id}>
-              <button>{perk.title}</button>
-            </a>
-          ))
-        //  : (
-        //   <h2>
-        //     Algo fora do lugar por aqui, por gentileza clique no logo acima e
-        //     faça o login novamente
-        //   </h2>
-        // )}
-          }
+        {renderUser.membership.perks.map((perk) => (
+          <a href={perk.link} key={perk.id}>
+            <button>{perk.title}</button>
+          </a>
+        ))}
       </div>
 
       <div className="footer">
