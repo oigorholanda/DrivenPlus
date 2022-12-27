@@ -1,23 +1,88 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { base_url } from "../constants/urls";
 
 export default function SignUp() {
+    const navigate = useNavigate()
+  const [form, setForm] = useState({
+    email: "",
+    name: "",
+    cpf: "",
+    password: "",
+  });
+
+  function handleForm (e) {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    }) 
+  }
+
+
+    function cadastrar(event) {
+        event.preventDefault();
+    
+        {axios
+            .post(`${base_url}/auth/sign-up`, form)
+            .then((res) => {
+              console.log(res.data)
+              alert("Cadastro efetuado com sucesso! Realize o Login")
+              navigate("/")
+            })
+            .catch((err) => {
+              alert(err.response.data.message)
+              console.log(err.response)
+            });
+        }
+      }
+
+
   return (
-    <ContainerLogin>
-      <input type="text" placeholder="Nome" required />
-      <input type="number" placeholder="CPF" required />
-      <input type="email" placeholder="E-mail" required />
-      <input type="password" placeholder="Senha" required />
-      <button>CADASTRAR</button>
+    <SignUpForm onSubmit={cadastrar}>
+      <input
+        type="text"
+        placeholder="Nome"
+        name="name"
+        onChange={handleForm}
+        value={form.name}
+        required
+      />
+      <input
+        type="text"
+        placeholder="CPF"
+        name="cpf"
+        onChange={handleForm}
+        value={form.cpf}
+        required
+      />
+      <input
+        type="email"
+        placeholder="E-mail"
+        name="email"
+        onChange={handleForm}
+        value={form.email}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Senha"
+        name="password"
+        onChange={handleForm}
+        value={form.password}
+        required
+      />
+      <button type='submit'>CADASTRAR</button>
 
       <Link to="/">
         <p>Já possuí uma conta? Entre</p>
       </Link>
-    </ContainerLogin>
+    </SignUpForm>
   );
 }
 
-const ContainerLogin = styled.form`
+const SignUpForm = styled.form`
   width: 300px;
   height: 600px;
   display: flex;
@@ -29,7 +94,6 @@ const ContainerLogin = styled.form`
   gap: 17px;
   h1 {
     color: white;
-    
   }
   p {
     margin-top: 20px;
