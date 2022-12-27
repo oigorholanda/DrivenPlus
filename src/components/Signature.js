@@ -16,6 +16,7 @@ export default function Signature() {
   const [plan, setPlan] = useState([]);
   const navigate = useNavigate();
   const [form, setForm] = useState({
+    membershipId: idPlano,
     cardName: "",
     cardNumber: "",
     securityNumber: "",
@@ -129,8 +130,7 @@ export default function Signature() {
       </SignatureForm>
       {modal && (
         <Modal
-          token={token}
-          membershipId={idPlano}
+          config={config}
           form={form}
           setModal={setModal}
           planName={plan.name}
@@ -160,7 +160,7 @@ const ContainerSign = styled.div`
   h3 {
     font-size: 32px;
     font-weight: 700;
-    margin: 0px auto 15px;
+    margin: 0px auto 12px;
   }
   h4 {
     font-size: 16px;

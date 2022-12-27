@@ -5,10 +5,12 @@ import styled from "styled-components";
 import Logo from "../assets/Driven_white 1.png";
 import { base_url } from "../constants/urls";
 import AuthContext from "../contexts/AuthContext";
+import UserContext from "../contexts/UserContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const { setToken } = useContext(AuthContext)
+  const { setUser } = useContext(UserContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,6 +22,7 @@ export default function Login() {
         .then((res) => {
           console.log(res.data);
           setToken(res.data.token)
+          setUser(res.data)
           if (res.data.membership !== null) {
             navigate("/home")
           } else {

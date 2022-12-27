@@ -35,7 +35,7 @@ function App() {
 export default App;
 
 const ContainerApp = styled.div`
-  max-width: 375px;
+  max-width: 390px;
   min-height: 100vh;
   margin: auto;
   background-color: black;

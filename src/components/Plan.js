@@ -1,7 +1,4 @@
 import styled from "styled-components";
-import logo1 from "../assets/Group 1.png";
-import logo2 from "../assets/Group 2.png";
-import logo3 from "../assets/Group 3.png";
 
 export default function Plan({ image, price }) {
 

@@ -1,8 +1,11 @@
 import { FaUserCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo3 from "../assets/Group 3.png";
 
 export default function Home() {
+    const navigate = useNavigate()
+
   return (
     <ContainerHome>
       <div className="header">
@@ -20,7 +23,7 @@ export default function Home() {
       </div>
 
       <div className="footer">
-        <button>Mudar plano</button>
+        <button onClick={() => navigate("/subscriptions")}>Mudar plano</button>
         <button className="cancel">Cancelar plano</button>
       </div>
     </ContainerHome>

@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { base_url } from "../constants/urls";
 import AuthContext from "../contexts/AuthContext";
-
 import Plan from "./Plan";
 
 export default function Subscriptions() {

@@ -1,27 +1,57 @@
+import axios from "axios";
+import { useContext } from "react";
 import { FaWindowClose } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { base_url } from "../constants/urls";
+import UserContext from "../contexts/UserContext";
 
-export default function Modal({planName, planPrice, setModal}) {
-    const navigate = useNavigate()
+export default function Modal({
+  form,
+  config,
+  planName,
+  planPrice,
+  setModal,
+}) {
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext)
 
-    return (
-        <ConfirmWindow>
-        <FaWindowClose color={"white"} size={32} onClick={() => setModal(false)} />
-        <div className="modal">
-          <h4>
-            Tem certeza que deseja assinar o plano <br /> {planName} por R$
-            {planPrice}?
-          </h4>
-          <div>
-            <button className="butao" onClick={() => setModal(false)}>
-              Não
-            </button>
-            <button onClick={() => navigate("/home")}>Sim</button>
-          </div>
+    function signPlan () {
+        console.log(form);
+        axios.post(`${base_url}/subscriptions`, form, config)
+        .then((res) => {
+            console.log("Assinatura realizada", res.data)
+            setUser(...user, res.data)
+            navigate("/home")
+        })
+        .catch((err) => {
+            alert("Não foi possivel procesar o pedido, verifique seus dados e tente novamente")
+            setModal(false)
+            console.log(err.response.data.message);
+        })
+    }
+
+  return (
+    <ConfirmWindow>
+      <FaWindowClose
+        color={"white"}
+        size={32}
+        onClick={() => setModal(false)}
+      />
+      <div className="modal">
+        <h4>
+          Tem certeza que deseja assinar o plano <br /> {planName} por R$
+          {planPrice}?
+        </h4>
+        <div>
+          <button className="buton" onClick={() => setModal(false)}>
+            Não
+          </button>
+          <button type="reset" onClick={signPlan}>Sim</button>
         </div>
-      </ConfirmWindow>
-    )
+      </div>
+    </ConfirmWindow>
+  );
 }
 
 const ConfirmWindow = styled.div`
@@ -48,7 +78,7 @@ const ConfirmWindow = styled.div`
     text-align: center;
     gap: 20px;
   }
-  .butao {
+  .buton {
     background-color: #cecece;
   }
 `;
