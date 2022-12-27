@@ -6,32 +6,29 @@ import styled from "styled-components";
 import { base_url } from "../constants/urls";
 import UserContext from "../contexts/UserContext";
 
-export default function Modal({
-  form,
-  config,
-  planName,
-  planPrice,
-  setModal,
-}) {
+export default function Modal({ form, config, planName, planPrice, setModal }) {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext);
 
-    function signPlan () {
-        console.log(form);
-        axios.post(`${base_url}/subscriptions`, form, config)
-        .then((res) => {
-            console.log("Assinatura realizada", res.data)
-            const newUser = {...user, membership:res.data}
-            setUser(newUser)
-            localStorage.setItem("user", JSON.stringify(newUser));
-            navigate("/home")
-        })
-        .catch((err) => {
-            alert("Não foi possivel processar o pedido, verifique seus dados e tente novamente")
-            setModal(false)
-            console.log(err.message);
-        })
-    }
+  function signPlan() {
+    console.log(form);
+    axios
+      .post(`${base_url}/subscriptions`, form, config)
+      .then((res) => {
+        console.log("Assinatura realizada", res.data);
+        const newUser = { ...user, membership: res.data.membership };
+        setUser(newUser);
+        localStorage.setItem("user", JSON.stringify(newUser));
+        navigate("/home");
+      })
+      .catch((err) => {
+        alert(
+          "Não foi possivel processar o pedido, verifique seus dados e tente novamente"
+        );
+        setModal(false);
+        console.log(err.message);
+      });
+  }
 
   return (
     <ConfirmWindow>
@@ -49,7 +46,9 @@ export default function Modal({
           <button className="buton" onClick={() => setModal(false)}>
             Não
           </button>
-          <button type="reset" onClick={signPlan}>Sim</button>
+          <button type="reset" onClick={signPlan}>
+            Sim
+          </button>
         </div>
       </div>
     </ConfirmWindow>

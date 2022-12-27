@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/Driven_white 1.png";
@@ -9,25 +9,34 @@ import UserContext from "../contexts/UserContext";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setToken } = useContext(AuthContext)
-  const { setUser } = useContext(UserContext)
+  const { setToken } = useContext(AuthContext);
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if (email === "" && password === "") {
+      setEmail(localStorage.getItem("email"));
+      setPassword(localStorage.getItem("password"));
+    }
+  }, []);
+
   function login(event) {
-    event.preventDefault()
+    event.preventDefault();
     {
       axios
-        .post(`${base_url}/auth/login`, {email, password})
+        .post(`${base_url}/auth/login`, { email, password })
         .then((res) => {
           console.log(res.data);
-          setToken(res.data.token)
-          setUser(res.data)
+          setToken(res.data.token);
+          setUser(res.data);
           localStorage.setItem("user", JSON.stringify(res.data));
+          localStorage.setItem("email", email);
+          localStorage.setItem("password", password);
           if (res.data.membership !== null) {
-            navigate("/home")
+            navigate("/home");
           } else {
-            navigate("/subscriptions")
+            navigate("/subscriptions");
           }
         })
         .catch((err) => {
@@ -57,8 +66,7 @@ export default function Login() {
         value={password}
         required
       />
-        <button type="submit">ENTRAR</button>
-      
+      <button type="submit">ENTRAR</button>
 
       <Link to="/sign-up">
         <p>Não possuí uma conta? Cadastre-se</p>

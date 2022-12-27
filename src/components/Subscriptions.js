@@ -28,7 +28,7 @@ export default function Subscriptions() {
         setPlans(res.data);
       })
       .catch((err) => {
-        console.log("Algo deu errado", err.response.data)
+        console.log("Algo deu errado", err.response.data);
       });
   }, []);
 
