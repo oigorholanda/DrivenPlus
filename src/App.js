@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
+import Home from "./components/Home";
 import Login from "./components/Login";
 import Signature from "./components/Signature";
 import SignUp from "./components/SignUp";
@@ -14,7 +15,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/subscriptions/:idPlano" element={<Signature />} />
-        <Route path="/home" element />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
     </ContainerApp>

@@ -69,6 +69,7 @@ button {
 	border: none;
 	font-size: 15px;
 	font-weight: 700;
+	margin-bottom: 8px;
 }
 a {
 	text-decoration: none;

@@ -32,7 +32,7 @@ const ContainerLogin = styled.form`
     
   }
   p {
-    margin-top: 25px;
+    margin-top: 20px;
     color: white;
     text-decoration: underline;
   }
